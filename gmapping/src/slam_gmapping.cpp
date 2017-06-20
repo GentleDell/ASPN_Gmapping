@@ -136,7 +136,7 @@ SlamGMapping::SlamGMapping():
   if(pose_map){
        PoseMsg_fileHd.open("/home/gentle/Documents/Laser_pose/scan_pose.txt", std::ofstream::out | std::ofstream::app);
        if(PoseMsg_fileHd.is_open()){
-           PoseMsg_fileHd<<"Time_stamp X Y theta"<<"\n";
+           PoseMsg_fileHd<<"Time_stamp X Y theta Cov11 Cov12 Cov13 Cov21 Cov22 Cov23 Cov31 Cov32 Cov33"<<"\n";
 
            PoseMsg_fileHd.close();
        }
@@ -148,7 +148,7 @@ SlamGMapping::SlamGMapping():
    else{
        MapMsg_fileHd.open("/home/gentle/Documents/Laser_pose/map_pose.txt", std::ofstream::out | std::ofstream::app);
        if (MapMsg_fileHd.is_open()){
-           MapMsg_fileHd<<"Time_stamp X Y theta"<<"\n";
+           MapMsg_fileHd<<"Time_stamp X Y theta Cov11 Cov12 Cov13 Cov21 Cov22 Cov23 Cov31 Cov32 Cov33"<<"\n";
 
            MapMsg_fileHd.close();
        }
@@ -669,7 +669,8 @@ SlamGMapping::addScan(const sensor_msgs::LaserScan& scan, GMapping::OrientedPoin
       if(PoseMsg_fileHd.is_open()){
           double time_stamp = ros::Time::now().toSec();
           std::cout << "Storing scan_pose" << std::endl;
-          PoseMsg_fileHd<< time_stamp <<" "<< reading.getPose().x<<" "<<reading.getPose().y<<" "<<reading.getPose().theta<<" "<<"\n";
+          PoseMsg_fileHd<< time_stamp <<" "<< reading.getPose().x<<" "<<reading.getPose().y<<" "<<reading.getPose().theta<<
+                           " " << "1 0 0 0 1 0 0 0 1"<<"\n";
 
           PoseMsg_fileHd.close();
       }
@@ -805,7 +806,8 @@ SlamGMapping::updateMap(const sensor_msgs::LaserScan& scan)
             if (MapMsg_fileHd.is_open()){
                 double secs = ros::Time::now().toSec();
                 std::cout<<" Storing map_pose "<<std::endl;
-                MapMsg_fileHd<< secs <<" "<< n->pose.x<< " " <<n->pose.y<<" "<<n->pose.theta<<"\n";
+                MapMsg_fileHd<< secs <<" "<< n->pose.x<< " " <<n->pose.y<<" "<<n->pose.theta<<
+                                " "<< "1 0 0 0 1 0 0 0 1" <<"\n";
 
                 MapMsg_fileHd.close();
             }
